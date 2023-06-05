@@ -1,0 +1,11 @@
+ID,name,category,state,quantity,expiration_date
+201,vinegar,category1,liters,32.9,23/05/23
+101,flour,category1,kilograms,56.8,23/06/23
+102,salt,category2,kilograms,3.9,23/01/24
+103,butter,category3,kilograms,45.8,09/06/23
+104,celery,category4,kilograms,25.2,30/06/24
+202,red_wine,category5,liters,19.9,01/04/23
+203,white_wine,category5,liters,29.9,04/05/23
+204,honey,category1,liters,30,23/06/23
+205,sesame_oil,category1,liters,11,06/06/23
+105,Pepper,category2,kilograms,4.2,27/03/23

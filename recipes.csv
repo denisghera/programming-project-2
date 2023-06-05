@@ -1,0 +1,8 @@
+recipe_ID,recipe_name,ingredient_name,quantity,state
+1,mashed_potatoes,potatoes,2,kilograms
+1,mashed_potatoes,milk,0.5,liters
+1,mashed_potatoes,butter,0.3,kilograms
+1,mashed_potatoes,salt,0.001,kilograms
+2,chocolate_cake,cocoa,1,kilograms
+2,chocolate_cake,butter,50,kilograms
+2,chocolate_cake,milk,1,liters
