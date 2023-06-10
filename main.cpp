@@ -4,6 +4,71 @@
 #include "RecipeItem.h"
 #include "Recipe.h"
 
+void clear_input_stream() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+int get_integer_input() {
+    int value;
+    while (true) {
+        if (std::cin >> value) {
+            // Input is valid, break the loop
+            break;
+        } else {
+            // Clear the error flag and input stream
+            clear_input_stream();
+            std::cout << "Invalid input. Please enter an integer: ";
+        }
+    }
+    return value;
+}
+
+double get_double_input() {
+    double value;
+    while (true) {
+        if (std::cin >> value) {
+            // Input is valid, break the loop
+            break;
+        } else {
+            // Clear the error flag and input stream
+            clear_input_stream();
+            std::cout << "Invalid input. Please enter a double: ";
+        }
+    }
+    return value;
+}
+
+std::string get_string_input() {
+    std::string value;
+    while (true) {
+        if (std::cin >> value) {
+            // Input is valid, break the loop
+            break;
+        } else {
+            // Clear the error flag and input stream
+            clear_input_stream();
+            std::cout << "Invalid input. Please enter a string: ";
+        }
+    }
+    return value;
+}
+
+char get_char_input() {
+    char value;
+    while (true) {
+        if (std::cin >> value && (value == 'y' || value == 'n')) {
+            // Input is valid, break the loop
+            break;
+        } else {
+            // Clear the error flag and input stream
+            clear_input_stream();
+            std::cout << "Invalid input. Please enter a character (y or n): ";
+        }
+    }
+    return value;
+}
+
 void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
     int choice = -1;
     while (choice != 0) {
@@ -20,14 +85,13 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
         std::cout << "9: Reset inventory\n";
         std::cout << "==============================\n";
         std::cout << "Enter your choice: ";
-        std::cin >> choice;
-
+        choice = get_integer_input();
         switch (choice) {
             case 0: {
                 std::cout << "Exiting inventory menu...\n";
                 std::cout << "Do you want to save the inventory? (y/n): ";
                 char answer;
-                std::cin >> answer;
+                answer = get_char_input();
                 if (answer == 'y') {
                     std::ofstream file("C:\\Users\\denis\\CLionProjects\\pp_cpp\\inventory.csv");
                     if (!file) {
@@ -60,17 +124,32 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
                 std::string name, category, state, expiration_date;
                 double quantity;
                 std::cout << "Enter item ID: ";
-                std::cin >> id;
+                id = get_integer_input();
                 std::cout << "Enter item name: ";
-                std::cin >> name;
+                name = get_string_input();
                 std::cout << "Enter item category: ";
-                std::cin >> category;
+                category = get_string_input();
                 std::cout << "Enter item state (kilograms or liters): ";
-                std::cin >> state;
+                state = get_string_input();
+                while(true) {
+                    if(state != "kilograms" && state != "liters") {
+                        std::cout << "Invalid input, please select kilograms or liters: ";
+                        state = get_string_input();
+                    }
+                    else break;
+                }
                 std::cout << "Enter item quantity: ";
-                std::cin >> quantity;
+                quantity = get_double_input();
                 std::cout << "Enter item expiration date (dd/mm/yy): ";
-                std::cin >> expiration_date;
+                expiration_date = get_string_input();
+                std::regex date_regex(R"(^\d{2}/\d{2}/\d{2}$)");
+                while(true) {
+                    if(std::regex_match(expiration_date, date_regex)) break;
+                    else {
+                        std::cout << "Invalid input, please select a valid expiration date (dd/mm/yy): ";
+                        expiration_date = get_string_input();
+                    }
+                }
                 InventoryItem item(id, name, category, state, quantity, expiration_date);
                 inventory.add_item(item);
                 std::cout << "Item added to inventory.\n";
@@ -79,7 +158,7 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
             case 3: {
                 int id;
                 std::cout << "Enter the ID of the item to delete: ";
-                std::cin >> id;
+                id = get_integer_input();
                 inventory.remove_item(id);
                 std::cout << "Item with ID " << id << " deleted.\n";
                 break;
@@ -87,7 +166,7 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
             case 4: {
                 std::string name;
                 std::cout << "Enter item name to search: ";
-                std::cin >> name;
+                name = get_string_input();
                 bool found = false;
                 for (int i = 0; i < inventory.size(); ++i) {
                     const InventoryItem& item = inventory[i];
@@ -106,7 +185,7 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
             case 5: {
                 std::string category;
                 std::cout << "Enter item category to search: ";
-                std::cin >> category;
+                category = get_string_input();
                 bool found = false;
                 for (int i = 0; i < inventory.size(); ++i) {
                     const InventoryItem& item = inventory[i];
@@ -125,7 +204,7 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
             case 6: {
                 int id;
                 std::cout << "Enter the ID of the item to update: ";
-                std::cin >> id;
+                id = get_integer_input();
 
                 // Check if the item with the given ID exists in the inventory
                 bool item_found = false;
@@ -141,15 +220,30 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
                     std::string name, category, state, expiration_date;
                     double quantity;
                     std::cout << "Enter item name: ";
-                    std::cin >> name;
+                    name = get_string_input();
                     std::cout << "Enter item category: ";
-                    std::cin >> category;
+                    category = get_string_input();
                     std::cout << "Enter item state (kilograms or liters): ";
-                    std::cin >> state;
+                    state = get_string_input();
+                    while(true) {
+                        if(state != "kilograms" && state != "liters") {
+                            std::cout << "Invalid input, please select kilograms or liters: ";
+                            state = get_string_input();
+                        }
+                        else break;
+                    }
                     std::cout << "Enter item quantity: ";
-                    std::cin >> quantity;
+                    quantity = get_double_input();
                     std::cout << "Enter item expiration date (dd/mm/yy): ";
-                    std::cin >> expiration_date;
+                    expiration_date = get_string_input();
+                    std::regex date_regex(R"(^\d{2}/\d{2}/\d{2}$)");
+                    while(true) {
+                        if(std::regex_match(expiration_date, date_regex)) break;
+                        else {
+                            std::cout << "Invalid input, please select a valid expiration date (dd/mm/yy): ";
+                            expiration_date = get_string_input();
+                        }
+                    }
                     inventory.update_item(id, name, category, state, quantity, expiration_date);
                     std::cout << "Item with ID " << id << " updated.\n";
                 } else {
@@ -160,8 +254,7 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
             case 7: {
                 int id;
                 std::cout << "Enter the ID of the item to check expiration: ";
-                std::cin >> id;
-
+                id = get_integer_input();
                 // Check if the item with the given ID exists in the inventory
                 bool item_found = false;
                 for (int i = 0; i < inventory.size(); ++i) {
@@ -190,14 +283,14 @@ void run_inventory_menu(Inventory& inventory, Recipe& recipe_list) {
                 recipe_list.visualize_recipes();
                 std::cout << "\nEnter the ID for the recipe wanted: ";
                 int id;
-                std::cin >> id;
+                id = get_integer_input();
                 recipe_list.check_sufficient_ingredients(id, inventory);
                 break;
             }
             case 9: {
                 std::cout << "Are you sure you want to reset the inventory? (y/n): ";
                 char answer;
-                std::cin >> answer;
+                answer = get_char_input();
                 if (answer == 'y')
                 {
                     inventory.reset();

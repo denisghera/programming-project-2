@@ -5,3 +5,6 @@
 #include <vector>
 #include <ctime>
 #include <iomanip>
+#include <limits>
+#include <stdexcept>
+#include <regex>
